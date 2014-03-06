@@ -21,9 +21,9 @@ public class fileParser {
     serverAttribute server = serverAttribute.getInstance();
     clientAttribute client = clientAttribute.getInstance();
     library lib = new library();
-   /**
-    * Parses the file server1.in to get the serverID, #ofServers, ServerAddresses & ServerInstructions
-    */
+    /**
+     * Parses the file server1.in to get the serverID, #ofServers, ServerAddresses & ServerInstructions
+     */
     public void serverInit(String filename) throws IOException {
 
         //Get server ID for the process

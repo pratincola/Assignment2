@@ -1,5 +1,6 @@
 package logicfactory;
 
+import server.TCPServer;
 import server.serverAttribute;
 
 import java.util.logging.Level;
@@ -13,13 +14,16 @@ public class businessLogic {
     final Logger logger = Logger.getLogger(businessLogic.class.getName());
     serverAttribute server = serverAttribute.getInstance();
     library myLibrary = new library();
-    int checkOutflag = 0 ;
+    boolean checkedOut = false ;
     int sleepCounter = -1;
     long Time2Sleep = 0L;
 
+    /**
+     * Initializes the library to where nothing is checkedout
+     */
     public void library_Init(){
         for(int books = 0; books < myLibrary.getNumOfBooks(); books++){
-            myLibrary.getBooks().put("b" + String.valueOf(books), checkOutflag);
+            myLibrary.getBooks().put("b" + String.valueOf(books), checkedOut);
             logger.log(Level.INFO, " " + myLibrary.getBooks().keySet() );
         }
     }
@@ -56,6 +60,39 @@ public class businessLogic {
 
 
 
+
+    /**
+     * Parse client's request & call appropriate methods
+     * @return
+     */
+    public byte[] makeResponse(String out){
+        out="a";
+
+
+        return out.getBytes();
+    }
+
+
+    public void broadcast(String msg){
+
+    }
+
+    /**
+     *  Start TCP server on port
+     */
+    public void startMyServerInstance(){
+
+        int server_port = Integer.valueOf(server.getServerAddresses().get(server.getServerID()).split(":")[1]);
+        TCPServer tcpServer = new TCPServer(server_port, 1024);
+        Thread qt = new Thread(tcpServer);
+        qt.start();
+        logger.log(Level.INFO, "TCP Server started on port: " + server_port);
+    }
+
+    /**
+     * @param sleepTime
+     * @throws InterruptedException
+     */
     public void server_Sleep(long sleepTime) throws InterruptedException {
         Thread.sleep(sleepTime);
     }

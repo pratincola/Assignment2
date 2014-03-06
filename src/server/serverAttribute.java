@@ -1,6 +1,7 @@
 package server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  */
 public class serverAttribute {
     int serverID, numOfServersInstances;
-    List<String> serverAddresses= new ArrayList<String>();
+    HashMap<Integer, String> serverAddresses= new HashMap<Integer, String>();
     List<String> serverInstruction = new ArrayList<String>();
 
 
@@ -40,11 +41,11 @@ public class serverAttribute {
         this.numOfServersInstances = numOfServersInstances;
     }
 
-    public List<String> getServerAddresses() {
+    public HashMap<Integer, String> getServerAddresses() {
         return serverAddresses;
     }
 
-    public void setServerAddresses(List<String> serverAddresses) {
+    public void setServerAddresses(HashMap<Integer, String> serverAddresses) {
         this.serverAddresses = serverAddresses;
     }
 
