@@ -9,7 +9,7 @@ import java.net.*;
 /**
  * Created by prateek on 2/16/14.
  */
-public class TCPClient {
+public class TCPClient implements Runnable{
     private final int socketTimeout = 1000;
 
     int len, port;
@@ -31,12 +31,24 @@ public class TCPClient {
         }
     }
 
-    public boolean connectTCP(){
+    public boolean connectTCP() {
+        try {
+            clientSocket = tcpSocket.accept();
+        } catch (SocketTimeoutException to) {
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
+    public void run(){
         //BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
         DataOutputStream outToServer = null;
 
         try {
-            clientSocket = tcpSocket.accept();
             // Send to Server
             outToServer = new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -48,13 +60,9 @@ public class TCPClient {
             System.out.println(modifiedSentence);
             clientSocket.close();
 
-        } catch (SocketTimeoutException to) {
-            return true;
-        } catch (IOException e) {
+        }catch (IOException e) {
             e.printStackTrace();
         }
-
-        return false;
     }
 
 }
