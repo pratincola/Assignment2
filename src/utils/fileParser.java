@@ -39,7 +39,7 @@ public class fileParser {
 
         //Load all Server addresses for communication
         for (int i = 0; i < server.getNumOfServersInstances(); i++) {
-            server.getServerAddresses().add(reader.readLine());
+            server.getServerAddresses().put(i, reader.readLine());
         }
 
         //Load server instructions for later use
