@@ -23,6 +23,7 @@ public class businessLogic {
      */
     public void library_Init(){
         for(int book = 0; book < myLibrary.getNumOfBooks(); ++book){
+            boolean dummy = true;
             bookValues b = new bookValues(book, "none");
             myLibrary.getBooks().put("b" + String.valueOf(book), b);
             logger.log(Level.INFO, " " + myLibrary.getBooks().keySet());
