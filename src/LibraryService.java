@@ -1,3 +1,4 @@
+import client.clientProcess;
 import logicfactory.businessLogic;
 import utils.fileParser;
 
@@ -16,10 +17,8 @@ public class LibraryService {
      */
     public static void main(String [] args) throws IOException {
         fileParser fp = new fileParser();
-        businessLogic bl =
-
-
-                new businessLogic();
+        businessLogic bl = new businessLogic();
+        clientProcess client = new clientProcess();
 
         final Logger logger = Logger.getLogger(LibraryService.class.getName());
         logger.setLevel(Level.INFO);
@@ -33,6 +32,11 @@ public class LibraryService {
         }
         else if (args[0].equals("client")) {
             fp.clientInit(args[1]);
+            try {
+                client.mainClient();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
         else {
