@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * Created by prateek on 3/4/14.
  */
 public class fileParser {
-    String regex = "\\s";
+    String regex = "\\s"; //space
     String line = null;
 
     private final static Logger logger = Logger.getLogger(fileParser.class.getName());
@@ -38,7 +38,7 @@ public class fileParser {
         lib.setNumOfBooks(Integer.valueOf(lineONE.split(regex)[1]));
 
         //Load all Server addresses for communication
-        for (int i = 0; i < server.getNumOfServersInstances(); i++) {
+        for (int i = 0; i < server.getNumOfServersInstances(); ++i) {
             server.getServerAddresses().put(i, reader.readLine());
         }
 
@@ -68,7 +68,7 @@ public class fileParser {
         client.setNumOfClientsInstances(Integer.valueOf(lineONE.split(regex)[0]));
 
         //
-        for (int i = 0; i < client.getNumOfClientsInstances(); i++) {
+        for (int i = 0; i < client.getNumOfClientsInstances(); ++i) {
             client.getHostAddresses().add(reader.readLine());
         }
 

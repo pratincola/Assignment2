@@ -1,5 +1,7 @@
 package logicfactory;
 
+import utils.bookValues;
+
 import java.util.Hashtable;
 
 /**
@@ -23,7 +25,8 @@ public class library {
         this.numOfBooks = numOfBooks;
     }
 
-    protected Hashtable<String,Boolean> books = new Hashtable<String,Boolean>();
-    protected int numOfBooks;
+    protected Hashtable books = new Hashtable<String,bookValues>();
+
+    private int numOfBooks;
 
 }
