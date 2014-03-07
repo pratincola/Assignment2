@@ -26,13 +26,13 @@ public class LibraryService {
 
 
         if (args[0].equals("server")) {
-            fp.serverInit(args[1]);
+            fp.serverFileParser(args[1]);
             // Initialize the books upon startup
             bl.library_Init();
 
         }
         else if (args[0].equals("client")) {
-            fp.clientInit(args[1]);
+            fp.clientFileParser(args[1]);
 
         }
         else {
