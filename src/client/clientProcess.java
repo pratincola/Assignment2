@@ -1,5 +1,9 @@
 package client;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.Socket;
 import java.util.List;
 
 /**
@@ -96,7 +100,12 @@ public class clientProcess {
                     //We can assume that at least 1 server will always be up.
                     //Not adding any error handling for now
                     addressCounter++;
-                    socketTimedOut = tcpClient.connectTCP();
+
+                    //Create a dummy socket to test if the server is alive
+                    SocketAddress testSocket = new InetSocketAddress(socketProperties[0], Integer.parseInt(socketProperties[1]));
+                    //Tests to see if server is up and running
+                    //Returns true if server times out
+                    socketTimedOut = tcpClient.testConnection(testSocket);
                 }
                 //Reset the host address counter so it will start from the first server every time
                 addressCounter = 0;
