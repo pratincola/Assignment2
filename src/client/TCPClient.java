@@ -58,6 +58,11 @@ public class TCPClient implements Runnable{
             // Receive from Server
             modifiedSentence = inFromServer.readLine();
             System.out.println(modifiedSentence);
+
+            //Write results to output file
+            writeOutputFile(modifiedSentence);
+
+            //Close the socket when finished with the transaction
             clientSocket.close();
 
         }catch (IOException e) {
@@ -65,4 +70,7 @@ public class TCPClient implements Runnable{
         }
     }
 
+    private void writeOutputFile(String result) {
+
+    }
 }
