@@ -29,6 +29,7 @@ public class LibraryService {
             fp.serverFileParser(args[1]);
             // Initialize the books upon startup
             bl.library_Init();
+            bl.startMyServerInstance();
 
         }
         else if (args[0].equals("client")) {
