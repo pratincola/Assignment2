@@ -15,29 +15,24 @@ public class TCPClient implements Runnable{
     int len, port;
     String hostname, sentence, modifiedSentence;
     Socket clientSocket;
-    ServerSocket tcpSocket;
 
     public TCPClient( int port, String hostname, String message) {
         this.len = len;
         this.port = port;
         this.hostname = hostname;
         this.sentence = message;
-
-        try {
-            tcpSocket = new ServerSocket(port);
-            tcpSocket.setSoTimeout(socketTimeout);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    public boolean connectTCP() {
+    public boolean testConnection(SocketAddress testSocket) {
+        Socket dummy = new Socket();
+
         try {
-            clientSocket = tcpSocket.accept();
+            dummy.connect(testSocket, socketTimeout);
         } catch (SocketTimeoutException to) {
-            return true;
+          return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return true;
         }
 
         return false;
@@ -49,6 +44,8 @@ public class TCPClient implements Runnable{
         DataOutputStream outToServer = null;
 
         try {
+            clientSocket = new Socket(hostname, port);
+
             // Send to Server
             outToServer = new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
