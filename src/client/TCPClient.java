@@ -28,6 +28,7 @@ public class TCPClient implements Runnable{
 
         try {
             dummy.connect(testSocket, socketTimeout);
+            dummy.close();
         } catch (SocketTimeoutException to) {
           return true;
         } catch (IOException e) {
