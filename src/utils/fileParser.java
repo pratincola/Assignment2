@@ -24,7 +24,7 @@ public class fileParser {
     /**
      * Parses the file server1.in to get the serverID, #ofServers, ServerAddresses & ServerInstructions
      */
-    public void serverInit(String filename) throws IOException {
+    public void serverFileParser(String filename) throws IOException {
 
         //Get server ID for the process
         server.setServerID(Integer.valueOf(filename.split("\\.", 0)[0].replaceAll("server", "")));
@@ -57,7 +57,7 @@ public class fileParser {
     /**
      * Parses the file client1.in to get the clientID, #ofServers, ServerAddresses & ClientInstructions
      */
-    public void clientInit(String filename) throws IOException {
+    public void clientFileParser(String filename) throws IOException {
 
         //Get server ID for the process
         client.setClientID(Integer.valueOf(filename.split("\\.", 0)[0].replaceAll("client", "")));
