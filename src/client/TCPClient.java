@@ -71,6 +71,6 @@ public class TCPClient implements Runnable{
     }
 
     private void writeOutputFile(String result) {
-
+        System.out.println("Stub for writing to output file");
     }
 }
