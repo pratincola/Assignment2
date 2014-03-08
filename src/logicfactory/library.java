@@ -25,7 +25,7 @@ public class library {
         this.numOfBooks = numOfBooks;
     }
 
-    protected Hashtable books = new Hashtable<String,bookValues>();
+    protected Hashtable books = new Hashtable<String, bookValues>();
 
     private int numOfBooks;
 

@@ -8,14 +8,17 @@ import java.util.List;
  */
 public class clientAttribute {
     int clientID, numOfClientsInstances;
-    List<String> hostAddresses= new ArrayList<String>();
+    List<String> hostAddresses = new ArrayList<String>();
     List<String> clientInstruction = new ArrayList<String>();
 
 
     private static final clientAttribute singleton = new clientAttribute();
-    private clientAttribute(){ }
+
+    private clientAttribute() {
+    }
+
     /* Static 'instance' method */
-    public static clientAttribute getInstance( ) {
+    public static clientAttribute getInstance() {
         return singleton;
     }
 

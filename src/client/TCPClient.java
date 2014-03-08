@@ -4,19 +4,21 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.*;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 
 /**
  * Created by prateek on 2/16/14.
  */
-public class TCPClient implements Runnable{
+public class TCPClient implements Runnable {
     private final int socketTimeout = 1000;
 
     int len, port;
     String hostname, sentence, modifiedSentence;
     Socket clientSocket;
 
-    public TCPClient( int port, String hostname, String message) {
+    public TCPClient(int port, String hostname, String message) {
         this.len = len;
         this.port = port;
         this.hostname = hostname;
@@ -30,7 +32,7 @@ public class TCPClient implements Runnable{
             dummy.connect(testSocket, socketTimeout);
             dummy.close();
         } catch (SocketTimeoutException to) {
-          return true;
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return true;
@@ -40,7 +42,7 @@ public class TCPClient implements Runnable{
     }
 
     @Override
-    public void run(){
+    public void run() {
         //BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
         DataOutputStream outToServer = null;
 
@@ -63,7 +65,7 @@ public class TCPClient implements Runnable{
             //Close the socket when finished with the transaction
             clientSocket.close();
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

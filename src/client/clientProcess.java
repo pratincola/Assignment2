@@ -1,14 +1,12 @@
 package client;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.net.Socket;
 import java.util.List;
 
 /**
  * Created by Steve Kim on 3/6/14.
- *
+ * <p/>
  * This is the main logic for the client processes
  * We assume that the client configuration file has already been read in by the clientAttribute object
  * The client process will parse the commands and send messages to the servers for processing
@@ -37,7 +35,7 @@ public class clientProcess {
     }
 
     //Construct the TCPClient object
-    public void setTcpClient (String hostname, String portNumber, String instruction) {
+    public void setTcpClient(String hostname, String portNumber, String instruction) {
         int port = Integer.parseInt(portNumber);
         tcpClient = new TCPClient(port, hostname, instruction);
     }
@@ -45,14 +43,14 @@ public class clientProcess {
     //Remove white spaces so we can see what type of command it is
     //3 tokens means we are doing a reserve or a return
     //2 tokens means we are sleeping for a time defined by token[1]
-    public String[] parseCommands (String command) {
+    public String[] parseCommands(String command) {
         String[] tokens = command.split(whitespaceRegex);
         return tokens;
     }
 
     //Remove the ':' from the IP Address read in by the configuration file
     //This separates the IP Address from the port number
-    public String[] parseIP (String address) {
+    public String[] parseIP(String address) {
         String[] tokens = address.split(colonRegex);
         return tokens;
     }
@@ -62,7 +60,7 @@ public class clientProcess {
      *       0 : This is a reserve/return command
      *      >0 : Returns the amount of time in ms to sleep
      */
-    public int processInstruction () {
+    public int processInstruction() {
         //We have finished parsing all the commands. This process can now exit
         if (commandCounter > commandSize) {
             return -1;
@@ -91,7 +89,7 @@ public class clientProcess {
             //Exit out of the process
             if (instructionCode == -1)
                 status = false;
-            //We will be sending a message to a server to reserve/return a book
+                //We will be sending a message to a server to reserve/return a book
             else if (instructionCode == 0) {
                 boolean socketTimedOut = true;
                 while (socketTimedOut == true) {
@@ -117,7 +115,7 @@ public class clientProcess {
             }
             //Put this process to sleep for defined amount of time (ms)
             else if (instructionCode > 0) {
-                    Thread.sleep(instructionCode);
+                Thread.sleep(instructionCode);
             }
         }
     }

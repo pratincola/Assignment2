@@ -9,14 +9,17 @@ import java.util.List;
  */
 public class serverAttribute {
     int serverID, numOfServersInstances;
-    HashMap<Integer, String> serverAddresses= new HashMap<Integer, String>();
+    HashMap<Integer, String> serverAddresses = new HashMap<Integer, String>();
     List<String> serverInstruction = new ArrayList<String>();
 
 
     private static final serverAttribute singleton = new serverAttribute();
-    private serverAttribute(){ }
+
+    private serverAttribute() {
+    }
+
     /* Static 'instance' method */
-    public static serverAttribute getInstance( ) {
+    public static serverAttribute getInstance() {
         return singleton;
     }
 

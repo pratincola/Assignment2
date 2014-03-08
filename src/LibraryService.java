@@ -1,5 +1,6 @@
 import client.clientProcess;
 import logicfactory.businessLogic;
+import logicfactory.library;
 import utils.fileParser;
 
 import java.io.IOException;
@@ -16,23 +17,23 @@ public class LibraryService {
      * To run the client program, pass in "client client1.in" program parameters.
      * BLAH!!!!
      */
-    public static void main(String [] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         fileParser fp = new fileParser();
         businessLogic bl = new businessLogic();
         clientProcess client = new clientProcess();
+        library libraryInstance;
 
         final Logger logger = Logger.getLogger(LibraryService.class.getName());
         logger.setLevel(Level.INFO);
 
 
         if (args[0].equals("server")) {
-            fp.serverFileParser(args[1]);
+            libraryInstance = fp.serverFileParser(args[1]);
             // Initialize the books upon startup
-            bl.library_Init();
-            bl.startMyServerInstance();
+            bl.library_Init(libraryInstance);
+            bl.startMyServerInstance(libraryInstance);
 
-        }
-        else if (args[0].equals("client")) {
+        } else if (args[0].equals("client")) {
             fp.clientFileParser(args[1]);
             try {
                 client.mainClient();
@@ -40,8 +41,7 @@ public class LibraryService {
                 e.printStackTrace();
             }
 
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Not a valid argument, Shutting Down: " + args);
         }
 

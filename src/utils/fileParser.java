@@ -21,10 +21,11 @@ public class fileParser {
     serverAttribute server = serverAttribute.getInstance();
     clientAttribute client = clientAttribute.getInstance();
     library lib = new library();
+
     /**
      * Parses the file server1.in to get the serverID, #ofServers, ServerAddresses & ServerInstructions
      */
-    public void serverFileParser(String filename) throws IOException {
+    public library serverFileParser(String filename) throws IOException {
 
         //Get server ID for the process
         server.setServerID(Integer.valueOf(filename.split("\\.", 0)[0].replaceAll("server", "")));
@@ -43,15 +44,15 @@ public class fileParser {
         }
 
         //Load server instructions for later use
-        while((line = reader.readLine())!=null) {
+        while ((line = reader.readLine()) != null) {
             server.getServerInstruction().add(line);
             logger.log(Level.INFO, "serverInstruction " + line);
         }
 
-        logger.info("ServerID " +  server.getServerID());
+        logger.info("ServerID " + server.getServerID());
         logger.log(Level.INFO, "getNumOfServersInstances " + server.getNumOfServersInstances());
-        logger.log(Level.INFO, "getNumOfBooks " +  lib.getNumOfBooks());
-
+        logger.log(Level.INFO, "getNumOfBooks " + lib.getNumOfBooks());
+        return lib;
     }
 
     /**
@@ -73,12 +74,12 @@ public class fileParser {
         }
 
         //Load all Server addresses for communication
-        while((line = reader.readLine())!=null) {
+        while ((line = reader.readLine()) != null) {
             client.getClientInstruction().add(line);
             logger.log(Level.INFO, "serverInstruction" + line);
         }
 
-        logger.info("ClientID " +  client.getClientID());
+        logger.info("ClientID " + client.getClientID());
         logger.log(Level.INFO, "getNumOfClientsInstances " + client.getNumOfClientsInstances());
 
     }
