@@ -29,6 +29,8 @@ public class LibraryService {
 
         if (args[0].equals("server")) {
             libraryInstance = fp.serverFileParser(args[1]);
+            // Read commands to execute
+            bl.execServerCommands();
             // Initialize the books upon startup
             bl.library_Init(libraryInstance);
             bl.startMyServerInstance(libraryInstance);

@@ -64,6 +64,8 @@ public class TCPServer implements Runnable {
 
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

@@ -14,8 +14,9 @@ import java.util.logging.Logger;
  * Created by prateek on 3/4/14.
  */
 public class fileParser {
-    String regex = "\\s"; //space
-    String line = null;
+    private final String whitespaceRegex = "\\s";
+    private final String periodRegex = "\\.";
+    private String line = null;
 
     private final static Logger logger = Logger.getLogger(fileParser.class.getName());
     serverAttribute server = serverAttribute.getInstance();
@@ -28,15 +29,15 @@ public class fileParser {
     public library serverFileParser(String filename) throws IOException {
 
         //Get server ID for the process
-        server.setServerID(Integer.valueOf(filename.split("\\.", 0)[0].replaceAll("server", "")));
+        server.setServerID(Integer.valueOf(filename.split(periodRegex, 0)[0].replaceAll("server", "")));
 
         //Get how many servers are in the cluster
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         String lineONE = reader.readLine();
-        server.setNumOfServersInstances(Integer.valueOf(lineONE.split(regex)[0]));
+        server.setNumOfServersInstances(Integer.valueOf(lineONE.split(whitespaceRegex)[0]));
 
         //Get how many books in the library
-        lib.setNumOfBooks(Integer.valueOf(lineONE.split(regex)[1]));
+        lib.setNumOfBooks(Integer.valueOf(lineONE.split(whitespaceRegex)[1]));
 
         //Load all Server addresses for communication
         for (int i = 0; i < server.getNumOfServersInstances(); ++i) {
@@ -61,12 +62,12 @@ public class fileParser {
     public void clientFileParser(String filename) throws IOException {
 
         //Get server ID for the process
-        client.setClientID(Integer.valueOf(filename.split("\\.", 0)[0].replaceAll("client", "")));
+        client.setClientID(Integer.valueOf(filename.split(periodRegex, 0)[0].replaceAll("client", "")));
 
         //Get how many servers are in the cluster
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         String lineONE = reader.readLine();
-        client.setNumOfClientsInstances(Integer.valueOf(lineONE.split(regex)[0]));
+        client.setNumOfClientsInstances(Integer.valueOf(lineONE.split(whitespaceRegex)[0]));
 
         //
         for (int i = 0; i < client.getNumOfClientsInstances(); ++i) {

@@ -12,10 +12,12 @@ import java.util.logging.Logger;
  */
 public class businessLogic {
 
+    private final String whitespaceRegex = "\\s";
+    private static int sleepCounter = -1;
+    private static long Time2Sleep = 0L;
+
     final Logger logger = Logger.getLogger(businessLogic.class.getName());
     serverAttribute server = serverAttribute.getInstance();
-    int sleepCounter = -1;
-    long Time2Sleep = 0L;
 
     /**
      * Initializes the library to where nothing is checkedout
@@ -35,7 +37,7 @@ public class businessLogic {
     public void execServerCommands() {
         if (!server.getServerInstruction().isEmpty()) {
             for (int commands = 0; commands < server.getServerInstruction().size(); commands++) {
-                String[] command = server.getServerInstruction().get(commands).split(" ");
+                String[] command = server.getServerInstruction().get(commands).split(whitespaceRegex);
                 // Check if the sleep command is for my process
                 if (command[0].equalsIgnoreCase(server.getCanonicalServerID())) {
                     sleepCounter = Integer.valueOf(command[1]);
@@ -64,28 +66,35 @@ public class businessLogic {
      * @return byte value for true/false depending on if the execution succeeds or not
      * c1 b2 reserve
      */
-    public byte[] makeResponse(String msgIN, library l) {
-        Boolean actionResult = false;
-        try {
-            String[] terms = msgIN.split(" ");
-            if (3 == terms.length) {
-                String clientID = terms[0];
-                String bookID = terms[1];
-                String commandID = terms[2];
+    public byte[] makeResponse(String msgIN, library l) throws InterruptedException {
 
-                if (commandID.equalsIgnoreCase("reserve")) {
-                    actionResult = reserveBook(clientID, bookID, l);
-                } else if (commandID.equalsIgnoreCase("return")) {
-                    actionResult = returnBook(clientID, bookID, l);
-                } else {
-                    logger.log(Level.WARNING, "Invalid Command");
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } finally {
-            return String.valueOf(actionResult).getBytes();
+        if(0 == sleepCounter){
+            server_Sleep(Time2Sleep);
         }
+        Boolean actionResult = false;
+            try {
+                String[] terms = msgIN.split(" ");
+                if (3 == terms.length) {
+                    String clientID = terms[0];
+                    String bookID = terms[1];
+                    String commandID = terms[2];
+
+                    if (commandID.equalsIgnoreCase("reserve")) {
+                        actionResult = reserveBook(clientID, bookID, l);
+                        sleepCounter--;
+                    } else if (commandID.equalsIgnoreCase("return")) {
+                        actionResult = returnBook(clientID, bookID, l);
+                        sleepCounter--;
+                    } else {
+                        logger.log(Level.WARNING, "Invalid Command");
+                    }
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } finally {
+                return String.valueOf(actionResult).getBytes();
+            }
+
 
     }
 
@@ -174,6 +183,7 @@ public class businessLogic {
      * @throws InterruptedException
      */
     public void server_Sleep(long sleepTime) throws InterruptedException {
+        logger.log(Level.INFO, "Entering sleep mode for " + sleepTime);
         Thread.sleep(sleepTime);
     }
 
