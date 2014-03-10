@@ -91,27 +91,22 @@ public class clientProcess {
                 status = false;
                 //We will be sending a message to a server to reserve/return a book
             else if (instructionCode == 0) {
-                boolean socketTimedOut = true;
-                while (socketTimedOut == true) {
+                //boolean socketTimedOut = true;
+
+                do {
                     String[] socketProperties = parseIP(possibleAddresses.get(addressCounter));
                     setTcpClient(socketProperties[0], socketProperties[1], commands.get(commandCounter));
                     //We can assume that at least 1 server will always be up.
                     //Not adding any error handling for now
                     addressCounter++;
 
-                    //Create a dummy socket to test if the server is alive
-                    SocketAddress testSocket = new InetSocketAddress(socketProperties[0], Integer.parseInt(socketProperties[1]));
-                    //Tests to see if server is up and running
-                    //Returns true if server times out
-                    socketTimedOut = tcpClient.testConnection(testSocket);
-                }
+                    tcpClient.run();
+                } while (tcpClient.getStatus() == true);
+
                 //Reset the host address counter so it will start from the first server every time
                 addressCounter = 0;
                 //Increment the command counter so we will process the next command on the next iteration
                 commandCounter++;
-
-                //We will need to implement Lamport's Mutex algorithm on the TCPClient side
-                tcpClient.run();
             }
             //Put this process to sleep for defined amount of time (ms)
             else if (instructionCode > 0) {

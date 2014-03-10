@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 public class TCPClient implements Runnable {
     private final int socketTimeout = 1000;
     private final static Logger logger = Logger.getLogger(TCPClient.class.getName());
+    private boolean getNextAddress = true;
 
     int len, port;
     String hostname, sentence, modifiedSentence;
@@ -44,6 +45,10 @@ public class TCPClient implements Runnable {
         return false;
     }
 
+    public boolean getStatus() {
+        return getNextAddress;
+    }
+
     @Override
     public void run() {
         //BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
@@ -67,9 +72,13 @@ public class TCPClient implements Runnable {
 
             //Close the socket when finished with the transaction
             clientSocket.close();
+            getNextAddress = false;
 
+        } catch (SocketTimeoutException to) {
+            getNextAddress = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            getNextAddress = true;
         }
     }
 
