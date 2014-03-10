@@ -12,12 +12,11 @@ import java.net.SocketTimeoutException;
  */
 public class TCPClient implements Runnable {
     private final int socketTimeout = 1000;
-<<<<<<< HEAD
+    
     private library serializedLibrary = null;
     private library updatedLibrary = null;
-=======
     private boolean getNextAddress = true;
->>>>>>> refs/heads/master
+
 
     int len, port;
     String hostname, sentence, modifiedSentence;
