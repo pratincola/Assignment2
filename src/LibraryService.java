@@ -23,7 +23,6 @@ public class LibraryService {
         fileParser fp = new fileParser();
         businessLogic bl = new businessLogic();
         clientProcess client;
-        
         LamportMutex lm = LamportMutex.getInstance();
         serverAttribute s = serverAttribute.getInstance();
         library libraryInstance;
@@ -43,8 +42,6 @@ public class LibraryService {
             lm.LamportMutex_Init(s.getServerID(),s.getNumOfServersInstances());
 
             bl.startMyServerInstance(libraryInstance);
-
-
 
         } else if (args[0].equals("client")) {
             fp.clientFileParser(args[1]);
