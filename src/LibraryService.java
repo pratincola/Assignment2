@@ -1,6 +1,8 @@
 import client.clientProcess;
+import logicfactory.LamportMutex;
 import logicfactory.businessLogic;
 import logicfactory.library;
+import server.serverAttribute;
 import utils.fileParser;
 
 import java.io.IOException;
@@ -21,6 +23,8 @@ public class LibraryService {
         fileParser fp = new fileParser();
         businessLogic bl = new businessLogic();
         clientProcess client = new clientProcess();
+        LamportMutex lm = LamportMutex.getInstance();
+        serverAttribute s = serverAttribute.getInstance();
         library libraryInstance;
 
         final Logger logger = Logger.getLogger(LibraryService.class.getName());
@@ -33,7 +37,13 @@ public class LibraryService {
             bl.execServerCommands();
             // Initialize the books upon startup
             bl.library_Init(libraryInstance);
+
+            // Initialize the server to keep track of other servers
+            lm.LamportMutex_Init(s.getServerID(),s.getNumOfServersInstances());
+
             bl.startMyServerInstance(libraryInstance);
+
+
 
         } else if (args[0].equals("client")) {
             fp.clientFileParser(args[1]);

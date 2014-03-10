@@ -2,6 +2,7 @@ package server;
 
 import logicfactory.businessLogic;
 import logicfactory.library;
+import utils.MessageImplementation;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -22,6 +23,7 @@ public class TCPServer implements Runnable {
     library myLib;
 
     businessLogic bl = new businessLogic();
+    MessageImplementation ml = new MessageImplementation();
 
     public TCPServer(int serverPort, int bufflen, library lib) {
         this.port = serverPort;
@@ -52,7 +54,9 @@ public class TCPServer implements Runnable {
                 clientRequest = inFromClient.readLine();
 
                 // Business Logic
-                byte[] b = bl.makeResponse(clientRequest, myLib); // singleton call
+
+                byte[] b = ml.receiveMsg(clientRequest,myLib);
+//                        bl.makeResponse(clientRequest, myLib); // singleton call
                 clientResponse = new String(b, "UTF-8");
 
                 // Outbound

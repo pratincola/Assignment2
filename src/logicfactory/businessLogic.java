@@ -1,9 +1,11 @@
 package logicfactory;
 
+import client.TCPClient;
 import server.TCPServer;
 import server.serverAttribute;
 import utils.bookValues;
 
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +39,7 @@ public class businessLogic {
     public void execServerCommands() {
         if (!server.getServerInstruction().isEmpty()) {
             for (int commands = 0; commands < server.getServerInstruction().size(); commands++) {
-                String[] command = server.getServerInstruction().get(commands).split(whitespaceRegex);
+                String[] command = parseCommands(server.getServerInstruction().get(commands), whitespaceRegex);
                 // Check if the sleep command is for my process
                 if (command[0].equalsIgnoreCase(server.getCanonicalServerID())) {
                     sleepCounter = Integer.valueOf(command[1]);
@@ -47,18 +49,13 @@ public class businessLogic {
                     break;
                 }
             }
-        }
+        } 
     }
 
-    /**
-     * TODO: A new method which decrements the sleepCounter & initiates a sleep with Time2Sleep time
-     * This has to be called upon when a client makes a call to the server. We would decrement the
-     * sleepCounter and check to see if its zero. If reaches zero then failover.
-     * We will also have to be smart about not calling 'execServerCommands' method till after the failover
-     * because otherwise, we would be overwriting the sleep commands. Hence, we should trigger execServerCommands
-     * again after the server has recovered from failover.
-     */
-
+    public String[] parseCommands (String command, String regex) {
+        String[] tokens = command.split(regex);
+        return tokens;
+    }
 
     /**
      * Parse client's request & call appropriate methods
@@ -68,7 +65,8 @@ public class businessLogic {
      */
     public byte[] makeResponse(String msgIN, library l) throws InterruptedException {
 
-        if(0 == sleepCounter){
+        // Sleep on the Kth command.
+        if(1 == sleepCounter){
             server_Sleep(Time2Sleep);
         }
         Boolean actionResult = false;
@@ -81,10 +79,10 @@ public class businessLogic {
 
                     if (commandID.equalsIgnoreCase("reserve")) {
                         actionResult = reserveBook(clientID, bookID, l);
-                        sleepCounter--;
+
                     } else if (commandID.equalsIgnoreCase("return")) {
                         actionResult = returnBook(clientID, bookID, l);
-                        sleepCounter--;
+
                     } else {
                         logger.log(Level.WARNING, "Invalid Command");
                     }
@@ -92,6 +90,7 @@ public class businessLogic {
             } catch (NullPointerException e) {
                 e.printStackTrace();
             } finally {
+                sleepCounter--;
                 return String.valueOf(actionResult).getBytes();
             }
 
@@ -154,6 +153,9 @@ public class businessLogic {
      * @param msg
      */
     public void broadcast(String msg) {
+
+
+
 
     }
 
