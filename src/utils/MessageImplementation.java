@@ -58,7 +58,7 @@ public class MessageImplementation {
     public byte [] receiveMsg (String tcpMessage, library lib) throws InterruptedException {
         byte[] res = "false".getBytes();
 
-
+    try{
         String [] message = tcpMessage.split(whitespaceRegex);
         if(message[0].equalsIgnoreCase("server")){
             // call mutex
@@ -70,6 +70,9 @@ public class MessageImplementation {
         else{
             res =  bl.makeResponse(tcpMessage, lib);
         }
+    }catch (NullPointerException e){
+        logger.log(Level.INFO, String.valueOf(e));
+    }
         return res;
     }
 
