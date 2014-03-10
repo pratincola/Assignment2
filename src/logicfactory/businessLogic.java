@@ -20,6 +20,9 @@ public class businessLogic {
     private static long Time2Sleep = 0L;
     private static MessageImplementation mImpl = new MessageImplementation();
 
+    private TCPClient replicateSocket = null;
+    private static library serverLibrary = null;
+
     final Logger logger = Logger.getLogger(businessLogic.class.getName());
     serverAttribute server = serverAttribute.getInstance();
     LamportMutex mutex = LamportMutex.getInstance();
@@ -84,17 +87,30 @@ public class businessLogic {
                     if (commandID.equalsIgnoreCase("reserve")) {
                         mutex.requestCS();
                         actionResult = reserveBook(clientID, bookID, l);
-                        /*if (actionResult == true) {
-                            mImpl.broadcastMsg(server.getServerID(),"replicate", );
-                        }*/
+                        //We only care about "true" condition
+                        //If actionResult == false, then the data within the server has not actually changed, and we
+                        //therefore do not need to send an update to the rest of the servers
+                        if (actionResult == true) {
+                            mImpl.broadcastMsg(server.getServerID(),"replicate", "push", l);
+                        }
                         mutex.releaseCS();
 
                     } else if (commandID.equalsIgnoreCase("return")) {
                         mutex.requestCS();
+                        //We only care about "true" condition
+                        //If actionResult == false, then the data within the server has not actually changed, and we
+                        //therefore do not need to send an update to the rest of the servers
                         actionResult = returnBook(clientID, bookID, l);
+                        if (actionResult == true) {
+                            mImpl.broadcastMsg(server.getServerID(),"replicate", "push", l);
+                        }
                         mutex.releaseCS();
 
-                    } else {
+                    } else if (commandID.equalsIgnoreCase("replicate")) {
+                        //We assume we have already requested a mutex if calling for a server replicate
+                        serverLibrary = l;
+                    }
+                    else {
                         logger.log(Level.WARNING, "Invalid Command");
                     }
                 }
@@ -184,6 +200,9 @@ public class businessLogic {
      */
     public void startMyServerInstance(library lib) {
 
+        //Keep a local copy of the server's library within business logic object
+        serverLibrary = lib;
+
         int server_port = Integer.valueOf(server.getServerAddresses().get(server.getServerID()).split(":")[1]);
         TCPServer tcpServer = new TCPServer(server_port, 1024, lib);
         Thread qt = new Thread(tcpServer);
@@ -205,5 +224,27 @@ public class businessLogic {
         return l;
     }
 
+    public library replicateServers() {
+        int serverKey = 1;
+        Map<Integer, String> serverList = server.getServerAddresses();
 
+        do {
+            //Parse list of available server IP addresses
+            if (serverKey != server.getServerID()) {
+                String[] targetServer = parseIP(serverList.get(serverKey));
+                serverKey++;
+                replicateSocket = new TCPClient (Integer.parseInt(targetServer[1]), targetServer[0], "request replicate");
+                replicateSocket.run();
+            }
+        } while (replicateSocket.getStatus() == true);
+        //Go until one of them is successfull
+        return replicateSocket.getUpdatedLibrary();
+    }
+
+    //Remove the ':' from the IP Address read in by the configuration file
+    //This separates the IP Address from the port number
+    public String[] parseIP(String address) {
+        String[] tokens = address.split(":");
+        return tokens;
+    }
 }

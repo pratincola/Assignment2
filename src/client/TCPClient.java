@@ -82,6 +82,8 @@ public class TCPClient implements Runnable {
 
             //Writes data out to the TCP Server
             outToServer.writeBytes(sentence + '\n');
+            //The library object in TCPClient should be null unless we specifically set it with the library object
+            //to be replicated
             if (this.serializedLibrary != null) {
                 oos.writeObject(this.serializedLibrary);
             }
@@ -89,9 +91,6 @@ public class TCPClient implements Runnable {
             // Receive from Server
             modifiedSentence = inFromServer.readLine();
             System.out.println(modifiedSentence);
-            if (modifiedSentence.equals("replicate")) {
-                updatedLibrary = (library)ois.readObject();
-            }
 
             //Write results to output file
             writeOutputFile(modifiedSentence);
@@ -105,8 +104,6 @@ public class TCPClient implements Runnable {
         } catch (IOException e) {
             //e.printStackTrace();
             getNextAddress = true;
-        } catch (ClassNotFoundException notFound) {
-            notFound.printStackTrace();
         }
     }
 

@@ -11,6 +11,7 @@ public class Message {
     int srcId, destId;
     String tag;
     String msgBuf;
+    private library newLib = null;
     private final String whitespaceRegex = "\\s";
     private final String whitespace = " ";
 
@@ -20,6 +21,15 @@ public class Message {
         tag = msgType;
         msgBuf = buf;
     }
+
+    public Message(int s, int t, String msgType, String buf, library updatedLibrary) {
+        this.srcId = s;
+        destId = t;
+        tag = msgType;
+        msgBuf = buf;
+        this.newLib = updatedLibrary;
+    }
+
 
     public int getSrcId() {
         return srcId;

@@ -4,10 +4,7 @@ import logicfactory.businessLogic;
 import logicfactory.library;
 import utils.MessageImplementation;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,6 +18,7 @@ public class TCPServer implements Runnable {
     String clientRequest;
     String clientResponse;
     library myLib;
+    private library sendLibrary = null;
 
     businessLogic bl = new businessLogic();
     MessageImplementation ml = new MessageImplementation();
@@ -40,18 +38,28 @@ public class TCPServer implements Runnable {
     @Override
     public void run() {
         Socket connectionSocket = null;
-        try {
+        /*try {
             // Inbound
             connectionSocket = welcomeSocket.accept();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         while (true) {
 
             try {
+                // Inbound
+                connectionSocket = welcomeSocket.accept();
+
+                //Receive buffers
                 BufferedReader inFromClient =
                         new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+                InputStream is = connectionSocket.getInputStream();
+                ObjectInputStream ois = new ObjectInputStream(is);
+
                 clientRequest = inFromClient.readLine();
+                if (clientRequest.contains("push")) {
+                    myLib = (library)ois.readObject();
+                }
 
                 // Business Logic
 
@@ -62,6 +70,9 @@ public class TCPServer implements Runnable {
                 // Outbound
 //                PrintWriter outToClient = new PrintWriter(connectionSocket.getOutputStream(), true);
                 DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+                OutputStream os = connectionSocket.getOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(os);
+
                 // outToClient.write(clientResponse);
                 outToClient.writeBytes(clientResponse);
                 outToClient.flush();
@@ -70,7 +81,10 @@ public class TCPServer implements Runnable {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } catch (ClassNotFoundException notFound) {
+                notFound.printStackTrace();
             }
+
         }
     }
 
