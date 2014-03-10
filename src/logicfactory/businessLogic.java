@@ -3,6 +3,7 @@ package logicfactory;
 import client.TCPClient;
 import server.TCPServer;
 import server.serverAttribute;
+import utils.MessageImplementation;
 import utils.bookValues;
 
 import java.util.Map;
@@ -17,9 +18,11 @@ public class businessLogic {
     private final String whitespaceRegex = "\\s";
     private static int sleepCounter = -1;
     private static long Time2Sleep = 0L;
+    private static MessageImplementation mImpl = new MessageImplementation();
 
     final Logger logger = Logger.getLogger(businessLogic.class.getName());
     serverAttribute server = serverAttribute.getInstance();
+    LamportMutex mutex = LamportMutex.getInstance();
 
     /**
      * Initializes the library to where nothing is checkedout
@@ -77,11 +80,19 @@ public class businessLogic {
                     String bookID = terms[1];
                     String commandID = terms[2];
 
+
                     if (commandID.equalsIgnoreCase("reserve")) {
+                        mutex.requestCS();
                         actionResult = reserveBook(clientID, bookID, l);
+                        /*if (actionResult == true) {
+                            mImpl.broadcastMsg(server.getServerID(),"replicate", );
+                        }*/
+                        mutex.releaseCS();
 
                     } else if (commandID.equalsIgnoreCase("return")) {
+                        mutex.requestCS();
                         actionResult = returnBook(clientID, bookID, l);
+                        mutex.releaseCS();
 
                     } else {
                         logger.log(Level.WARNING, "Invalid Command");
