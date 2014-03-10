@@ -59,6 +59,10 @@ public class TCPClient implements Runnable {
         return getNextAddress;
     }
 
+    public library getUpdatedLibrary() {
+        return updatedLibrary;
+    }
+
     @Override
     public void run() {
         //BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
@@ -86,7 +90,7 @@ public class TCPClient implements Runnable {
             modifiedSentence = inFromServer.readLine();
             System.out.println(modifiedSentence);
             if (modifiedSentence.equals("replicate")) {
-                updatedLibrary = (library)ois.readObject(ois);
+                updatedLibrary = (library)ois.readObject();
             }
 
             //Write results to output file
@@ -101,6 +105,8 @@ public class TCPClient implements Runnable {
         } catch (IOException e) {
             //e.printStackTrace();
             getNextAddress = true;
+        } catch (ClassNotFoundException notFound) {
+            notFound.printStackTrace();
         }
     }
 
