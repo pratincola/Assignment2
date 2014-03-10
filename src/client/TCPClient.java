@@ -6,6 +6,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by prateek on 2/16/14.
@@ -17,6 +19,7 @@ public class TCPClient implements Runnable {
     private library updatedLibrary = null;
     private boolean getNextAddress = true;
 
+    private final static Logger logger = Logger.getLogger(TCPClient.class.getName());
 
     int len, port;
     String hostname, sentence, modifiedSentence;

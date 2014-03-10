@@ -62,7 +62,7 @@ public class clientProcess {
      */
     public int processInstruction() {
         //We have finished parsing all the commands. This process can now exit
-        if (commandCounter > commandSize) {
+        if (commandCounter >= commandSize) {
             return -1;
         }
 
