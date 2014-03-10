@@ -17,6 +17,7 @@ public class TCPClient implements Runnable {
     
     private library serializedLibrary = null;
     private library updatedLibrary = null;
+    private final static Logger logger = Logger.getLogger(TCPClient.class.getName());
     private boolean getNextAddress = true;
 
     private final static Logger logger = Logger.getLogger(TCPClient.class.getName());
