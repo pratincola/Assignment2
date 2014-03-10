@@ -22,7 +22,8 @@ public class LibraryService {
     public static void main(String[] args) throws IOException {
         fileParser fp = new fileParser();
         businessLogic bl = new businessLogic();
-        clientProcess client = new clientProcess();
+        clientProcess client;
+        
         LamportMutex lm = LamportMutex.getInstance();
         serverAttribute s = serverAttribute.getInstance();
         library libraryInstance;
@@ -48,6 +49,7 @@ public class LibraryService {
         } else if (args[0].equals("client")) {
             fp.clientFileParser(args[1]);
             try {
+                client = new clientProcess();
                 client.mainClient();
             } catch (InterruptedException e) {
                 e.printStackTrace();

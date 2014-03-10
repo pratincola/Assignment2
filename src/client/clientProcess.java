@@ -31,7 +31,7 @@ public class clientProcess {
     public clientProcess() {
         this.possibleAddresses = client.getHostAddresses();
         this.commands = client.getClientInstruction();
-        commandCounter = possibleAddresses.size();
+        commandSize = commands.size();
     }
 
     //Construct the TCPClient object
