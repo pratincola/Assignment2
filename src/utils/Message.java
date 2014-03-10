@@ -1,5 +1,7 @@
 package utils;
 
+import logicfactory.library;
+
 import java. util .*;
 
 /**
@@ -18,6 +20,7 @@ public class Message {
         tag = msgType;
         msgBuf = buf;
     }
+
     public int getSrcId() {
         return srcId;
     }

@@ -2,12 +2,13 @@ package logicfactory;
 
 import utils.bookValues;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
 /**
  * Created by prateek on 3/5/14.
  */
-public class library {
+public class library implements Serializable{
 
     public Hashtable getBooks() {
         return books;

@@ -37,6 +37,25 @@ public class MessageImplementation {
         }
     }
 
+    public void broadcastMsg(int src, String MsgType , library updatedLibrary){
+        for(Map.Entry<Integer,String> entry: server.getServerAddresses().entrySet()){
+            // Send message to everyone but me
+            if(entry.getKey() != src){
+                Pair<String,Integer> idPair  = server.getAddressForServer(entry.getKey());
+                sendMsg(idPair.snd,idPair.fst, entry.getKey() ,src, MsgType, Msg);
+
+            }
+        }
+    }
+
+    public void sendMsg( int destPort , String destIP, int destServerID, int srcServerID, String tag, library updatedLibrary){
+        // Compose message
+        Message m = new Message(srcServerID, destServerID, tag, msg );
+        TCPClient tcpClient = new TCPClient(destPort,destIP, m.toString());
+        Thread tC = new Thread(tcpClient);
+        tC.start();
+    }
+
     public void sendMsg( int destPort , String destIP, int destServerID, int srcServerID, String tag, String msg){
         // Compose message
         Message m = new Message(srcServerID, destServerID, tag, msg );
