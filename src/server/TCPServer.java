@@ -4,10 +4,7 @@ import logicfactory.businessLogic;
 import logicfactory.library;
 import utils.MessageImplementation;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -50,23 +47,22 @@ public class TCPServer implements Runnable {
 
             try {
                 // Inbound
-//                connectionSocket = welcomeSocket.accept();
+                connectionSocket = welcomeSocket.accept();
                 BufferedReader inFromClient =
                         new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
                 clientRequest = inFromClient.readLine();
 
                 // Business Logic
-                if(clientResponse!= null){
+                if(clientRequest!= null){
                     byte[] b = ml.receiveMsg(clientRequest,myLib);
 //                        bl.makeResponse(clientRequest, myLib); // singleton call
                     clientResponse = new String(b, "UTF-8");
 
                     // Outbound
-    //                PrintWriter outToClient = new PrintWriter(connectionSocket.getOutputStream(), true);
+//                    PrintWriter outToClient = new PrintWriter(connectionSocket.getOutputStream(), true);
                     DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-                    // outToClient.write(clientResponse);
-                    outToClient.writeBytes(clientResponse);
-
+//                    outToClient.write(clientResponse);
+                    outToClient.writeBytes(clientResponse + '\n');
                     outToClient.flush();
                 }
                 else{
