@@ -68,7 +68,9 @@ public class MessageImplementation {
         }
 
         else{
+
             res =  bl.makeResponse(tcpMessage, lib);
+
         }
     }catch (NullPointerException e){
         logger.log(Level.INFO, String.valueOf(e));

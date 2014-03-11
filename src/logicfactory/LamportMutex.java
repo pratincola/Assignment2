@@ -27,9 +27,9 @@ public class LamportMutex implements utils.Lock {
         myId = myServerID;
         N = numOfServers;
         v = new DirectClock(N, myId);
-        q = new int [N];
+        q = new int [N + 1]; // Since all our serverIDs start with 1 and not 0, however, the loops start at 0
 
-        for (int j = 0; j <N; j++){
+        for (int j = 0; j <= N; j++){
             q[j] = Infinity;
         }
     }
@@ -52,7 +52,7 @@ public class LamportMutex implements utils.Lock {
     }
 
     boolean okayCS() {
-        for (int j = 0; j <N; j++){
+        for (int j = 1; j <= N; ++j){
             if ( isGreater(q[myId], myId, q[j], j ))
                 return false ;
             if (isGreater (q[myId], myId, v.getValue(j), j ))

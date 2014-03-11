@@ -25,7 +25,7 @@ public class businessLogic {
      * Initializes the library to where nothing is checkedout
      */
     public void library_Init(library myLibrary) {
-        for (int book = 1; book < myLibrary.getNumOfBooks(); book++) {
+        for (int book = 1; book <= myLibrary.getNumOfBooks(); book++) {
             bookValues b = new bookValues(book, "none");
             myLibrary.getBooks().put("b" + String.valueOf(book), b);
             logger.log(Level.INFO, " " + myLibrary.getBooks().keySet());
@@ -79,10 +79,8 @@ public class businessLogic {
 
                     if (commandID.equalsIgnoreCase("reserve")) {
                         actionResult = reserveBook(clientID, bookID, l);
-
                     } else if (commandID.equalsIgnoreCase("return")) {
                         actionResult = returnBook(clientID, bookID, l);
-
                     } else {
                         logger.log(Level.WARNING, "Invalid Command");
                     }
@@ -173,7 +171,8 @@ public class businessLogic {
      */
     public void startMyServerInstance(library lib) {
 
-        int server_port = Integer.valueOf(server.getServerAddresses().get(server.getServerID()).split(":")[1]);
+        String [] token = parseCommands(server.getServerAddresses().get(server.getServerID()), ":");
+        int server_port = Integer.valueOf(token[1]);
         TCPServer tcpServer = new TCPServer(server_port, 1024, lib);
         Thread qt = new Thread(tcpServer);
         qt.start();
