@@ -22,6 +22,7 @@ public class businessLogic {
     private TCPClient replicateSocket = null;
     private static library serverLibrary = null;
 
+    private static MessageImplementation mImpl = new MessageImplementation();
     final Logger logger = Logger.getLogger(businessLogic.class.getName());
     serverAttribute server = serverAttribute.getInstance();
 
