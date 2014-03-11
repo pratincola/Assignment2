@@ -37,6 +37,28 @@ public class MessageImplementation {
         }
     }
 
+    //Broadcast for sending library to all other servers
+    public void broadcastMsg(int src, String MsgType , String Msg, library updatedLibrary){
+        for(Map.Entry<Integer,String> entry: server.getServerAddresses().entrySet()){
+            // Send message to everyone but me
+            if(entry.getKey() != src){
+                Pair<String,Integer> idPair  = server.getAddressForServer(entry.getKey());
+                sendMsg(idPair.snd,idPair.fst, entry.getKey() ,src, MsgType, Msg, updatedLibrary);
+
+            }
+        }
+    }
+
+    //Send message for replicating data between servers
+    public void sendMsg( int destPort , String destIP, int destServerID, int srcServerID, String tag, String msg, library updatedLibrary){
+        // Compose message
+        Message m = new Message(srcServerID, destServerID, tag, msg );
+        TCPClient tcpClient = new TCPClient(destPort,destIP, m.toString(), updatedLibrary);
+        Thread tC = new Thread(tcpClient);
+        tC.start();
+    }
+
+
     public void sendMsg( int destPort , String destIP, int destServerID, int srcServerID, String tag, String msg){
         // Compose message
         Message m = new Message(srcServerID, destServerID, tag, msg );
@@ -63,7 +85,9 @@ public class MessageImplementation {
 
     try{
         String [] message = tcpMessage.split(whitespaceRegex);
-        if(message[0].equalsIgnoreCase("server")){
+        //If a server sends out a replicate command, we want it to go straight to business logic
+        //We assume that replicate commands have already requested a mutex
+        if(message[0].equalsIgnoreCase("server") && !message[1].equalsIgnoreCase("replicate")){
             // call mutex
             String ackMsg;
             StringTokenizer st = new StringTokenizer(tcpMessage);

@@ -4,6 +4,7 @@ import client.TCPClient;
 import server.TCPServer;
 import server.serverAttribute;
 import sun.print.resources.serviceui_zh_TW;
+import utils.MessageImplementation;
 import utils.bookValues;
 
 import java.util.Map;
@@ -17,9 +18,12 @@ public class businessLogic {
 
     private final String whitespaceRegex = "\\s";
 
+
+    private TCPClient replicateSocket = null;
+    private static library serverLibrary = null;
+
     final Logger logger = Logger.getLogger(businessLogic.class.getName());
     serverAttribute server = serverAttribute.getInstance();
-
 
     public String[] parseCommands (String command, String regex) {
         String[] tokens = command.split(regex);
@@ -47,15 +51,35 @@ public class businessLogic {
                     String bookID = terms[1];
                     String commandID = terms[2];
 
+
                     if (commandID.equalsIgnoreCase("reserve")) {
                         LamportMutex.getInstance().requestCS();
                         actionResult = reserveBook(clientID, bookID, l);
+                        //We only care about "true" condition
+                        //If actionResult == false, then the data within the server has not actually changed, and we
+                        //therefore do not need to send an update to the rest of the servers
+                        if (actionResult == true) {
+                            mImpl.broadcastMsg(server.getServerID(),"replicate", "push", l);
+                        }
                         LamportMutex.getInstance().releaseCS();
+
                     } else if (commandID.equalsIgnoreCase("return")) {
                         LamportMutex.getInstance().requestCS();
+
+                        //We only care about "true" condition
+                        //If actionResult == false, then the data within the server has not actually changed, and we
+                        //therefore do not need to send an update to the rest of the servers
                         actionResult = returnBook(clientID, bookID, l);
+                        if (actionResult == true) {
+                            mImpl.broadcastMsg(server.getServerID(),"replicate", "push", l);
+                        }
                         LamportMutex.getInstance().releaseCS();
-                    } else {
+
+                    } else if (commandID.equalsIgnoreCase("replicate")) {
+                        //We assume we have already requested a mutex if calling for a server replicate
+                        serverLibrary = l;
+                    }
+                    else {
                         logger.log(Level.WARNING, "Invalid Command");
                     }
                 }
@@ -140,7 +164,6 @@ public class businessLogic {
 
     }
 
-
     /**
      * @param sleepTime
      * @throws InterruptedException
@@ -155,5 +178,27 @@ public class businessLogic {
         return l;
     }
 
+    /*public library replicateServers() {
+        int serverKey = 1;
+        Map<Integer, String> serverList = server.getServerAddresses();
 
+        do {
+            //Parse list of available server IP addresses
+            if (serverKey != server.getServerID()) {
+                String[] targetServer = parseIP(serverList.get(serverKey));
+                serverKey++;
+                replicateSocket = new TCPClient (Integer.parseInt(targetServer[1]), targetServer[0], "request replicate");
+                replicateSocket.run();
+            }
+        } while (replicateSocket.getStatus() == true);
+        //Go until one of them is successfull
+        return replicateSocket.getUpdatedLibrary();
+    }*/
+
+    //Remove the ':' from the IP Address read in by the configuration file
+    //This separates the IP Address from the port number
+    public String[] parseIP(String address) {
+        String[] tokens = address.split(":");
+        return tokens;
+    }
 }
