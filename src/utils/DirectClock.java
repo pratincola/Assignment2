@@ -14,10 +14,11 @@ public class DirectClock {
     public DirectClock(int numProc, int id ) {
         myId = id ;
         clock = new int [numProc + 1]; // Since all our serverIDs start with 1 and not 0, however, the loops start at 0
-        for (int i = 0; i <numProc ; i++){
+        for (int i = 0; i <= numProc ; i++){
             clock[i] = 0;
-            clock [myId] = 1;
         }
+            clock [myId] = 1;
+
     }
 
     public int getValue(int i ) {

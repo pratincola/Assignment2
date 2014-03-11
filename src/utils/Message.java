@@ -31,7 +31,8 @@ public class Message {
         return msgBuf;
     }
     public Integer getClock() {
-        return Integer.valueOf(msgBuf);
+        String [] token = msgBuf.split(whitespace);
+        return Integer.valueOf(token[1]);
     }
 
     public static Message parseMsg(StringTokenizer st){

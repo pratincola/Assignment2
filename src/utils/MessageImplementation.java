@@ -47,13 +47,14 @@ public class MessageImplementation {
         logger.log(Level.INFO, "Thread is: " +  String.valueOf(tcpClient.getStatus()));
     }
 
-    public void sendMsg( int destServerID, int srcServerID, String tag, String msg){
+    public String sendAck( int destServerID, int srcServerID, String tag, String msg){
         // Compose message
         Message m = new Message(srcServerID, destServerID, tag, msg );
         Pair<String, Integer> idPair =  server.getAddressForServer(destServerID);
-        TCPClient tcpClient = new TCPClient(idPair.snd,idPair.fst, m.toString());
-        Thread tC = new Thread(tcpClient);
-        tC.start();
+        return m.toString();
+//        TCPClient tcpClient = new TCPClient(idPair.snd,idPair.fst, m.toString());
+//        Thread tC = new Thread(tcpClient);
+//        tC.start();
     }
 
     // Have to distinguish the message from client vs. from another server
@@ -64,9 +65,11 @@ public class MessageImplementation {
         String [] message = tcpMessage.split(whitespaceRegex);
         if(message[0].equalsIgnoreCase("server")){
             // call mutex
+            String ackMsg;
             StringTokenizer st = new StringTokenizer(tcpMessage);
             Message receivedMessage = Message.parseMsg(st);
-            lm.handleMsg(receivedMessage, receivedMessage.getSrcId(), receivedMessage.getTag() );
+            ackMsg = lm.handleMsg(receivedMessage, receivedMessage.getSrcId(), receivedMessage.getTag() );
+            res = ackMsg.getBytes();
         }
 
         else{

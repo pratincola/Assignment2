@@ -13,7 +13,7 @@ public class LamportMutex implements utils.Lock {
     private static int N, myId;
     static DirectClock v;
     static int [] q ; // request queue
-    MessageImplementation mil = new MessageImplementation();
+    static MessageImplementation mil = new MessageImplementation();
 
     public static final int Infinity = -1;
 
@@ -52,7 +52,7 @@ public class LamportMutex implements utils.Lock {
     }
 
     boolean okayCS() {
-        for (int j = 1; j <= N; ++j){
+        for (int j = 1; j <= N; j++){
             if ( isGreater(q[myId], myId, q[j], j ))
                 return false ;
             if (isGreater (q[myId], myId, v.getValue(j), j ))
@@ -69,16 +69,19 @@ public class LamportMutex implements utils.Lock {
         return (( entry1 > entry2) || (( entry1 == entry2) && (pid1 > pid2 )));
     }
 
-    public synchronized void handleMsg(Message m, int src , String tag){
+    public static synchronized String handleMsg(Message m, int src , String tag){
+        String msg = "none";
         int timestamp = m.getClock();
         v.receiveAction(src , timestamp);
         if (tag.equals("request")) {
             q[src] = timestamp;
-            mil.sendMsg( m.getSrcId(), myId , "ack", String.valueOf(v.getValue(myId)));
+            msg =  mil.sendAck( m.getSrcId(), myId , "ack", String.valueOf(v.getValue(myId)));
+
         }
         else if ( tag.equals("release"))
                     q[src] = Infinity;
-        notify (); // okayCS() may be true now
+//        notify(); // okayCS() may be true now
+        return msg;
     }
 
 }
