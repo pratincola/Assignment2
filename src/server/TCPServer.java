@@ -19,7 +19,6 @@ public class TCPServer implements Runnable {
     String clientResponse;
     library myLib;
 
-    businessLogic bl = new businessLogic();
     MessageImplementation ml = new MessageImplementation();
 
     public TCPServer(int serverPort, int bufflen, library lib) {
@@ -37,12 +36,6 @@ public class TCPServer implements Runnable {
     @Override
     public void run() {
         Socket connectionSocket = null;
-//        try {
-//            // Inbound
-//            connectionSocket = welcomeSocket.accept();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         while (true) {
 
             try {

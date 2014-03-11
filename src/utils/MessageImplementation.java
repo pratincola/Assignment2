@@ -24,7 +24,7 @@ public class MessageImplementation {
     final Logger logger = Logger.getLogger(MessageImplementation.class.getName());
     serverAttribute server = serverAttribute.getInstance();
     businessLogic bl = new businessLogic();
-    LamportMutex lm ;
+    LamportMutex lm = LamportMutex.getInstance();
 
     public void broadcastMsg(int src, String MsgType , String Msg){
         for(Map.Entry<Integer,String> entry: server.getServerAddresses().entrySet()){
@@ -41,8 +41,10 @@ public class MessageImplementation {
         // Compose message
         Message m = new Message(srcServerID, destServerID, tag, msg );
         TCPClient tcpClient = new TCPClient(destPort,destIP, m.toString());
+//        tcpClient.run();
         Thread tC = new Thread(tcpClient);
         tC.start();
+        logger.log(Level.INFO, "Thread is: " +  String.valueOf(tcpClient.getStatus()));
     }
 
     public void sendMsg( int destServerID, int srcServerID, String tag, String msg){
@@ -68,9 +70,9 @@ public class MessageImplementation {
         }
 
         else{
-
+            lm.requestCS();
             res =  bl.makeResponse(tcpMessage, lib);
-
+            lm.releaseCS();
         }
     }catch (NullPointerException e){
         logger.log(Level.INFO, String.valueOf(e));
@@ -81,7 +83,7 @@ public class MessageImplementation {
     // useless, need to remove; but okay for now.
     public synchronized void myWait() {
         try {
-            wait();
+            wait(1000);
         } catch (InterruptedException e) {System.err.println(e);
         }
     }

@@ -55,17 +55,22 @@ public class TCPClient implements Runnable {
         DataOutputStream outToServer = null;
 
         try {
-            clientSocket = new Socket(hostname, port);
+            logger.log(Level.INFO, "Startting 1");
 
+            clientSocket = new Socket(hostname, port);
+            logger.log(Level.INFO, "Startting 2");
             // Send to Server
             outToServer = new DataOutputStream(clientSocket.getOutputStream());
+            logger.log(Level.INFO, "Startting 3");
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             //sentence = inFromUser.readLine();
+            logger.log(Level.INFO, "Inside TCPClient, msg to server: " + sentence);
             outToServer.writeBytes(sentence + '\n');
 
             // Receive from Server
             modifiedSentence = inFromServer.readLine();
-            System.out.println(modifiedSentence);
+            logger.log(Level.INFO, "Inside TCPClient, msg from server: " + modifiedSentence);
+
 
             //Write results to output file
             writeOutputFile(modifiedSentence);

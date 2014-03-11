@@ -3,6 +3,7 @@ package logicfactory;
 import client.TCPClient;
 import server.TCPServer;
 import server.serverAttribute;
+import sun.print.resources.serviceui_zh_TW;
 import utils.bookValues;
 
 import java.util.Map;
@@ -15,42 +16,10 @@ import java.util.logging.Logger;
 public class businessLogic {
 
     private final String whitespaceRegex = "\\s";
-    private static int sleepCounter = -1;
-    private static long Time2Sleep = 0L;
 
     final Logger logger = Logger.getLogger(businessLogic.class.getName());
     serverAttribute server = serverAttribute.getInstance();
 
-    /**
-     * Initializes the library to where nothing is checkedout
-     */
-    public void library_Init(library myLibrary) {
-        for (int book = 1; book <= myLibrary.getNumOfBooks(); book++) {
-            bookValues b = new bookValues(book, "none");
-            myLibrary.getBooks().put("b" + String.valueOf(book), b);
-            logger.log(Level.INFO, " " + myLibrary.getBooks().keySet());
-        }
-    }
-
-    /**
-     * The following code checks to see if there are any instructions for the server to
-     * sleep. If so, we set the variables appropriately and remove the command from memory
-     */
-    public void execServerCommands() {
-        if (!server.getServerInstruction().isEmpty()) {
-            for (int commands = 0; commands < server.getServerInstruction().size(); commands++) {
-                String[] command = parseCommands(server.getServerInstruction().get(commands), whitespaceRegex);
-                // Check if the sleep command is for my process
-                if (command[0].equalsIgnoreCase(server.getCanonicalServerID())) {
-                    sleepCounter = Integer.valueOf(command[1]);
-                    Time2Sleep = Long.valueOf(command[2]);
-                    // We will execute this command eventually, hence no need to keep it in memory
-                    server.getServerInstruction().remove(commands);
-                    break;
-                }
-            }
-        } 
-    }
 
     public String[] parseCommands (String command, String regex) {
         String[] tokens = command.split(regex);
@@ -66,8 +35,8 @@ public class businessLogic {
     public byte[] makeResponse(String msgIN, library l) throws InterruptedException {
 
         // Sleep on the Kth command.
-        if(1 == sleepCounter){
-            server_Sleep(Time2Sleep);
+        if(1 == server.getSleepCounter()){
+            server_Sleep(server.getTime2Sleep());
         }
         Boolean actionResult = false;
             try {
@@ -88,7 +57,7 @@ public class businessLogic {
             } catch (NullPointerException e) {
                 e.printStackTrace();
             } finally {
-                sleepCounter--;
+                server.decSleepCounter();
                 return String.valueOf(actionResult).getBytes();
             }
 
@@ -166,18 +135,6 @@ public class businessLogic {
 
     }
 
-    /**
-     * Start TCP server on port
-     */
-    public void startMyServerInstance(library lib) {
-
-        String [] token = parseCommands(server.getServerAddresses().get(server.getServerID()), ":");
-        int server_port = Integer.valueOf(token[1]);
-        TCPServer tcpServer = new TCPServer(server_port, 1024, lib);
-        Thread qt = new Thread(tcpServer);
-        qt.start();
-        logger.log(Level.INFO, "TCP Server started on port: " + server_port);
-    }
 
     /**
      * @param sleepTime

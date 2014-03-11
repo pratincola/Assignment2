@@ -8,12 +8,13 @@ import java.util.*;
  * Created by prateek on 3/4/14.
  */
 public class serverAttribute {
+
     int serverID, numOfServersInstances;
     Map<Integer, String> serverAddresses = new LinkedHashMap<Integer, String>();
     List<String> serverInstruction = new ArrayList<String>();
 
-    private final String colonRegex = ":";
-
+    private  int sleepCounter = -1;
+    private  long Time2Sleep = 0L;
 
     private static final serverAttribute singleton = new serverAttribute();
 
@@ -24,6 +25,33 @@ public class serverAttribute {
     public static serverAttribute getInstance() {
         return singleton;
     }
+
+
+
+    public  int getSleepCounter() {
+        return sleepCounter;
+    }
+
+    public void setSleepCounter(int sleepCounter) {
+        sleepCounter = sleepCounter;
+    }
+
+    public void decSleepCounter() {
+        this.sleepCounter--;
+    }
+
+    public long getTime2Sleep() {
+        return Time2Sleep;
+    }
+
+    public void setTime2Sleep(long time2Sleep) {
+        Time2Sleep = time2Sleep;
+    }
+
+
+
+    private final String colonRegex = ":";
+
 
 
     public int getServerID() {
