@@ -3,6 +3,8 @@ package client;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Steve Kim on 3/6/14.
@@ -26,6 +28,7 @@ public class clientProcess {
 
     //Client is a singleton. This guarantees only one instance of client per process
     clientAttribute client = clientAttribute.getInstance();
+    final Logger logger = Logger.getLogger(clientProcess.class.getName());
 
     //Constructor
     public clientProcess() {
@@ -72,7 +75,7 @@ public class clientProcess {
         //If there are only 2 tokens, then we know the client needs to sleep
         if (instruction.length == 2) {
             commandCounter++;
-            return (Integer.getInteger(instruction[1]));
+            return (Integer.valueOf(instruction[1]));
         }
 
         //We don't care about handling reserve/return just yet
@@ -110,7 +113,9 @@ public class clientProcess {
             }
             //Put this process to sleep for defined amount of time (ms)
             else if (instructionCode > 0) {
+                logger.log(Level.INFO, "Entering client sleepmode!!!");
                 Thread.sleep(instructionCode);
+                logger.log(Level.INFO, "!!!!Exiting client sleepmode");
             }
         }
     }

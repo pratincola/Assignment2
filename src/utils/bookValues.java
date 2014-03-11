@@ -15,6 +15,12 @@ public class bookValues {
         this.checkedOut = false;
     }
 
+    public bookValues(final Integer bookNum, final String clientName, final boolean checkedOut) {
+        this.bookNum = bookNum;
+        this.clientName = clientName;
+        this.checkedOut = checkedOut;
+    }
+
     public Integer getBookNum() {
         return bookNum;
     }

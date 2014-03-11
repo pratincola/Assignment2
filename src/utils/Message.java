@@ -28,7 +28,8 @@ public class Message {
         return tag;
     }
     public String getMessage() {
-        return msgBuf;
+        String [] token = msgBuf.split(whitespace);
+        return token[1];
     }
     public Integer getClock() {
         String [] token = msgBuf.split(whitespace);
