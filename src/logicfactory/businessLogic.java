@@ -4,6 +4,7 @@ import client.TCPClient;
 import server.TCPServer;
 import server.serverAttribute;
 import sun.print.resources.serviceui_zh_TW;
+import utils.MessageImplementation;
 import utils.bookValues;
 
 import java.util.Map;
@@ -19,6 +20,7 @@ public class businessLogic {
 
     final Logger logger = Logger.getLogger(businessLogic.class.getName());
     serverAttribute server = serverAttribute.getInstance();
+    static MessageImplementation mi_bl = new MessageImplementation();
 
 
     public String[] parseCommands (String command, String regex) {
@@ -50,10 +52,12 @@ public class businessLogic {
                     if (commandID.equalsIgnoreCase("reserve")) {
                         LamportMutex.getInstance().requestCS();
                         actionResult = reserveBook(clientID, bookID, l);
+                        replicateLib(l);
                         LamportMutex.getInstance().releaseCS();
                     } else if (commandID.equalsIgnoreCase("return")) {
                         LamportMutex.getInstance().requestCS();
                         actionResult = returnBook(clientID, bookID, l);
+                        replicateLib(l);
                         LamportMutex.getInstance().releaseCS();
                     } else {
                         logger.log(Level.WARNING, "Invalid Command");
@@ -68,6 +72,18 @@ public class businessLogic {
 
 
     }
+
+    public boolean replicateLib(library lib){
+        String libraryString = lib.toString();
+        logger.log(Level.INFO, libraryString);
+        mi_bl.broadcastMsg(server.getServerID(), "replicate",libraryString );
+        return true;
+    }
+
+    public void updateLib(String s, library lib){
+        lib.libraryUpdate(s);
+    }
+
 
 
     /**

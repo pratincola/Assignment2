@@ -68,8 +68,14 @@ public class MessageImplementation {
             String ackMsg;
             StringTokenizer st = new StringTokenizer(tcpMessage);
             Message receivedMessage = Message.parseMsg(st);
-            ackMsg = lm.handleMsg(receivedMessage, receivedMessage.getSrcId(), receivedMessage.getTag() );
-            res = ackMsg.getBytes();
+            if(receivedMessage.getTag().equalsIgnoreCase("replicate")){
+                //replicate
+                bl.updateLib(receivedMessage.getMessage(), lib);
+                res = "Successful".getBytes();
+            }else{
+                ackMsg = lm.handleMsg(receivedMessage, receivedMessage.getSrcId(), receivedMessage.getTag() );
+                res = ackMsg.getBytes();
+            }
         }
 
         else{

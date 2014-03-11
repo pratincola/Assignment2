@@ -29,5 +29,29 @@ public class library {
 
     private int numOfBooks;
 
+    @Override
+    public String toString() {
+        String hashRepresentation = "";
+        bookValues b;
+        for (Object book : books.keySet()) {
+            b = (bookValues)books.get(book);
+            hashRepresentation = hashRepresentation + (String)book + ','
+                    + b.getBookNum() + ',' +  b.getClientName()
+                    + ',' + b.getCheckedOut() + ';';
+        }
+        return hashRepresentation;
+    }
 
+    public void libraryUpdate(String s){
+        String [] chunks = s.split(";");
+        for(String k: chunks){
+            String key = k.split(",")[0];
+            String id = k.split(",")[1];
+            String client = k.split(",")[2];
+            String checkedOut = k.split(",")[3];
+            bookValues b = new bookValues(Integer.parseInt(id), client, Boolean.valueOf(checkedOut));
+            books.remove(key);
+            books.put(key, b);
+        }
+    }
 }
