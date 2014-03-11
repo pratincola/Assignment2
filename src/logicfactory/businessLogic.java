@@ -36,6 +36,7 @@ public class businessLogic {
 
         // Sleep on the Kth command.
         if(1 == server.getSleepCounter()){
+            logger.log(Level.INFO, "Entering SLEEP MODE !!!!!!!!!");
             server_Sleep(server.getTime2Sleep());
         }
         Boolean actionResult = false;
@@ -47,9 +48,13 @@ public class businessLogic {
                     String commandID = terms[2];
 
                     if (commandID.equalsIgnoreCase("reserve")) {
+                        LamportMutex.getInstance().requestCS();
                         actionResult = reserveBook(clientID, bookID, l);
+                        LamportMutex.getInstance().releaseCS();
                     } else if (commandID.equalsIgnoreCase("return")) {
+                        LamportMutex.getInstance().requestCS();
                         actionResult = returnBook(clientID, bookID, l);
+                        LamportMutex.getInstance().releaseCS();
                     } else {
                         logger.log(Level.WARNING, "Invalid Command");
                     }

@@ -73,9 +73,9 @@ public class MessageImplementation {
         }
 
         else{
-            lm.requestCS();
+//            lm.requestCS();
             res =  bl.makeResponse(tcpMessage, lib);
-            lm.releaseCS();
+//            lm.releaseCS();
         }
     }catch (NullPointerException e){
         logger.log(Level.INFO, String.valueOf(e));
