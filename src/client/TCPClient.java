@@ -105,29 +105,29 @@ public class TCPClient implements Runnable {
 
     private void writeOutputFile(String result) {
         System.out.println("Stub for writing to output file: " + result);
-        String[] commandTokens = sentence.split(" ");
-
-
-        String outputString = commandTokens[0] + " " + commandTokens[1];
-        try {
-            if (fileOutput == null) {
-                fileOutput = new PrintWriter("c"+Integer.toString(clientID)+".out", "UTF-8");
-                b = new BufferedWriter(fileOutput);
-            }
-            if (result.equals("false")) {
-                fileOutput.println("fail " + outputString);
-            }
-            else if (result.equals("true")) {
-//                fileOutput.println(outputString);
-                b.write(outputString);
-            }
-        } catch (FileNotFoundException notFound){
-            notFound.printStackTrace();
-        } catch (UnsupportedEncodingException unsupported) {
-            unsupported.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        String[] commandTokens = sentence.split(" ");
+//
+//
+//        String outputString = commandTokens[0] + " " + commandTokens[1];
+//        try {
+//            if (fileOutput == null) {
+//                fileOutput = new PrintWriter("c"+Integer.toString(clientID)+".out", "UTF-8");
+//                b = new BufferedWriter(fileOutput);
+//            }
+//            if (result.equals("false")) {
+//                fileOutput.println("fail " + outputString);
+//            }
+//            else if (result.equals("true")) {
+////                fileOutput.println(outputString);
+//                b.write(outputString);
+//            }
+//        } catch (FileNotFoundException notFound){
+//            notFound.printStackTrace();
+//        } catch (UnsupportedEncodingException unsupported) {
+//            unsupported.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 

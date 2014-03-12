@@ -65,15 +65,15 @@ public class TCPServer implements Runnable {
                     outToClient.writeBytes(clientResponse + '\n');
                     outToClient.flush();
 
-                    if(0 == server.getSleepCounter()){
-                        logger.log(Level.INFO, "Entering SLEEP MODE !!!!!!!!!");
-//                        Thread dummy = new Thread();
-//                        dummy.sleep(server.getTime2Sleep());
-//                        dummy.join();
-                          Thread.sleep(server.getTime2Sleep());
-
-                        logger.log(Level.INFO, "!!!!!!Exiting SLEEP MODE");
-                    }
+//                    if(0 == server.getSleepCounter()){
+//                        logger.log(Level.INFO, "Entering SLEEP MODE !!!!!!!!!");
+////                        Thread dummy = new Thread();
+////                        dummy.sleep(server.getTime2Sleep());
+////                        dummy.join();
+//                          Thread.sleep(server.getTime2Sleep());
+//
+//                        logger.log(Level.INFO, "!!!!!!Exiting SLEEP MODE");
+//                    }
                 }
                 else{
                     clientRequest = "false";

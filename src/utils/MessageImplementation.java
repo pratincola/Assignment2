@@ -51,7 +51,7 @@ public class MessageImplementation {
         }
         if(tcpClient.getStatus() == true){
             //Faking message from the faulted server.
-            Message ms = new Message(destServerID, srcServerID, "ack", String.valueOf( Integer.valueOf(msg) + 1));
+            Message ms = new Message(destServerID, srcServerID, "ack", String.valueOf( Integer.valueOf(msg) ));
             LamportMutex.handleMsg(ms, destServerID, "ack");
             logger.log(Level.INFO, ms.toString());
         }
