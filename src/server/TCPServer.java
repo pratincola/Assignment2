@@ -23,6 +23,7 @@ public class TCPServer implements Runnable {
 
     MessageImplementation ml = new MessageImplementation();
     private final static Logger logger = Logger.getLogger(TCPServer.class.getName());
+    serverAttribute server = serverAttribute.getInstance();
 
     public TCPServer(int serverPort, int bufflen, library lib) {
         this.port = serverPort;
@@ -62,6 +63,12 @@ public class TCPServer implements Runnable {
 //                    outToClient.write(clientResponse);
                     outToClient.writeBytes(clientResponse + '\n');
                     outToClient.flush();
+
+                    if(0 == server.getSleepCounter()){
+                        logger.log(Level.INFO, "Entering SLEEP MODE !!!!!!!!!");
+                        Thread.sleep(server.getTime2Sleep());
+                        logger.log(Level.INFO, "!!!!!!Exiting SLEEP MODE");
+                    }
                 }
                 else{
                     clientRequest = "false";

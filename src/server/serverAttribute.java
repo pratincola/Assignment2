@@ -32,12 +32,13 @@ public class serverAttribute {
         return sleepCounter;
     }
 
-    public void setSleepCounter(int sleepCounter) {
-        sleepCounter = sleepCounter;
+    public void setSleepCounter(int sC) {
+
+        sleepCounter = sC;
     }
 
     public void decSleepCounter() {
-        this.sleepCounter--;
+        sleepCounter--;
     }
 
     public long getTime2Sleep() {

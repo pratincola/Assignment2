@@ -37,10 +37,7 @@ public class businessLogic {
     public byte[] makeResponse(String msgIN, library l) throws InterruptedException {
 
         // Sleep on the Kth command.
-        if(1 == server.getSleepCounter()){
-            logger.log(Level.INFO, "Entering SLEEP MODE !!!!!!!!!");
-            server_Sleep(server.getTime2Sleep());
-        }
+
         Boolean actionResult = false;
             try {
                 String[] terms = msgIN.split(" ");
@@ -155,17 +152,6 @@ public class businessLogic {
     public void respond2broadcast(String msg) {
 
     }
-
-
-    /**
-     * @param sleepTime
-     * @throws InterruptedException
-     */
-    public void server_Sleep(long sleepTime) throws InterruptedException {
-        logger.log(Level.INFO, "Entering sleep mode for " + sleepTime);
-        Thread.sleep(sleepTime);
-    }
-
 
     public library getlibrary(library l) {
         return l;
