@@ -1,5 +1,6 @@
 package server;
 
+import com.sun.jdi.event.ThreadDeathEvent;
 import logicfactory.businessLogic;
 import logicfactory.library;
 import utils.MessageImplementation;
@@ -66,7 +67,11 @@ public class TCPServer implements Runnable {
 
                     if(0 == server.getSleepCounter()){
                         logger.log(Level.INFO, "Entering SLEEP MODE !!!!!!!!!");
-                        Thread.sleep(server.getTime2Sleep());
+//                        Thread dummy = new Thread();
+//                        dummy.sleep(server.getTime2Sleep());
+//                        dummy.join();
+                          Thread.sleep(server.getTime2Sleep());
+
                         logger.log(Level.INFO, "!!!!!!Exiting SLEEP MODE");
                     }
                 }

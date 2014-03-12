@@ -32,8 +32,11 @@ public class Message {
         return token[1];
     }
     public Integer getClock() {
-        String [] token = msgBuf.split(whitespace);
-        return Integer.valueOf(token[1]);
+        if(msgBuf.contains(" ")){
+            String [] token = msgBuf.split(whitespace);
+            return Integer.valueOf(token[1]);
+        }
+        return Integer.valueOf(msgBuf);
     }
 
     public static Message parseMsg(StringTokenizer st){

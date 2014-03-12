@@ -3,10 +3,7 @@ package client;
 import logicfactory.LamportMutex;
 import utils.Message;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
@@ -21,6 +18,10 @@ public class TCPClient implements Runnable {
     private final int socketTimeout = 1000;
     private final static Logger logger = Logger.getLogger(TCPClient.class.getName());
     private boolean getNextAddress = true;
+    private int clientID = clientAttribute.getInstance().getClientID();
+    private static PrintWriter fileOutput = null;
+
+    BufferedWriter b ;
 
     LamportMutex lm = LamportMutex.getInstance();
 
@@ -86,9 +87,9 @@ public class TCPClient implements Runnable {
                 }catch (Exception e){
                     logger.log(Level.SEVERE, String.valueOf(e));
                 }
-            }else{
+            }else if((message[0].equalsIgnoreCase("true")) || (message[0].equalsIgnoreCase("false"))) {
                 //Write results to output file
-                writeOutputFile(modifiedSentence);
+                this.writeOutputFile(modifiedSentence);
             }
             //Close the socket when finished with the transaction
             clientSocket.close();
@@ -104,5 +105,30 @@ public class TCPClient implements Runnable {
 
     private void writeOutputFile(String result) {
         System.out.println("Stub for writing to output file: " + result);
+        String[] commandTokens = sentence.split(" ");
+
+
+        String outputString = commandTokens[0] + " " + commandTokens[1];
+        try {
+            if (fileOutput == null) {
+                fileOutput = new PrintWriter("c"+Integer.toString(clientID)+".out", "UTF-8");
+                b = new BufferedWriter(fileOutput);
+            }
+            if (result.equals("false")) {
+                fileOutput.println("fail " + outputString);
+            }
+            else if (result.equals("true")) {
+//                fileOutput.println(outputString);
+                b.write(outputString);
+            }
+        } catch (FileNotFoundException notFound){
+            notFound.printStackTrace();
+        } catch (UnsupportedEncodingException unsupported) {
+            unsupported.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
 }

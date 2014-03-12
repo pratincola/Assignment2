@@ -44,7 +44,18 @@ public class MessageImplementation {
 //        tcpClient.run();
         Thread tC = new Thread(tcpClient);
         tC.start();
-        logger.log(Level.INFO, "Thread is: " +  String.valueOf(tcpClient.getStatus()));
+        try {
+            tC.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(tcpClient.getStatus() == true){
+            //Faking message from the faulted server.
+            Message ms = new Message(destServerID, srcServerID, "ack", String.valueOf( Integer.valueOf(msg) + 1));
+            LamportMutex.handleMsg(ms, destServerID, "ack");
+            logger.log(Level.INFO, ms.toString());
+        }
+
     }
 
     public String sendAck( int destServerID, int srcServerID, String tag, String msg){

@@ -1,6 +1,13 @@
 2
 127.0.0.1:8025
 127.0.0.1:8030
-c1 b8 reserve
-c1 b2 return
+c1 b1 reserve
 c1 b2 reserve
+c1 b3 reserve
+c1 b4 reserve
+c1 b5 reserve
+c1 b6 reserve
+c1 b7 reserve
+c1 b8 reserve
+c1 b9 return
+c1 b9 reserve
