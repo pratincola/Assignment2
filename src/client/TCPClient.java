@@ -85,7 +85,8 @@ public class TCPClient implements Runnable {
                 try{
                 StringTokenizer st = new StringTokenizer(modifiedSentence);
                 Message receivedMessage = Message.parseMsg(st);
-                LamportMutex.handleMsg(receivedMessage, receivedMessage.getSrcId(), receivedMessage.getTag());
+//                LamportMutex.handleMsg(receivedMessage, receivedMessage.getSrcId(), receivedMessage.getTag());
+                lm.handleMsg(receivedMessage, receivedMessage.getSrcId(), receivedMessage.getTag());
                 }catch (Exception e){
                     logger.log(Level.SEVERE, String.valueOf(e));
                 }

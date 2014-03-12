@@ -45,7 +45,9 @@ public class TCPServer implements Runnable {
 
             try {
                 // Inbound
+                logger.log(Level.INFO, "Connecting to: Server " + Integer.toString(server.getServerID()));
                 connectionSocket = welcomeSocket.accept();
+                logger.log(Level.INFO, "CONNECTED!!!!!");
                 BufferedReader inFromClient =
                         new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
                 clientRequest = inFromClient.readLine();

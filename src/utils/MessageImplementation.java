@@ -49,7 +49,7 @@ public class MessageImplementation {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(tcpClient.getStatus() == true){
+        if(tcpClient.getStatus() == true && !m.tag.equals("replicate")){
             //Faking message from the faulted server.
             Message ms = new Message(destServerID, srcServerID, "ack", String.valueOf( Integer.valueOf(msg) + 1));
             LamportMutex.handleMsg(ms, destServerID, "ack");

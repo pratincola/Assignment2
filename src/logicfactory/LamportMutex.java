@@ -80,7 +80,7 @@ public class LamportMutex implements utils.Lock {
         }
         else if ( tag.equals("release"))
                     q[src] = Infinity;
-//        notify(); // okayCS() may be true now
+        //notify(); // okayCS() may be true now
         return msg;
     }
 
