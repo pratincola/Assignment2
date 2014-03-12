@@ -50,11 +50,13 @@ public class businessLogic {
                         LamportMutex.getInstance().requestCS();
                         actionResult = reserveBook(clientID, bookID, l);
                         replicateLib(l);
+                        server.decSleepCounter();
                         LamportMutex.getInstance().releaseCS();
                     } else if (commandID.equalsIgnoreCase("return")) {
                         LamportMutex.getInstance().requestCS();
                         actionResult = returnBook(clientID, bookID, l);
                         replicateLib(l);
+                        server.decSleepCounter();
                         LamportMutex.getInstance().releaseCS();
                     } else {
                         logger.log(Level.WARNING, "Invalid Command");
@@ -63,7 +65,7 @@ public class businessLogic {
             } catch (NullPointerException e) {
                 e.printStackTrace();
             } finally {
-                server.decSleepCounter();
+//                server.decSleepCounter();
                 return String.valueOf(actionResult).getBytes();
             }
 
