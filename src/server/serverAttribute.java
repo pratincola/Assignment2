@@ -1,6 +1,7 @@
 package server;
 
-import com.sun.tools.javac.util.Pair;
+//import com.sun.tools.javac.util.Pair;
+import utils.Pair;
 
 import java.util.*;
 
@@ -94,7 +95,7 @@ public class serverAttribute {
     public Pair<String, Integer> getAddressForServer(int i){
         String val = serverAddresses.get(i);
         String[] tokens = val.split(colonRegex);
-        return Pair.of(tokens[0], Integer.valueOf(tokens[1]));
+        return Pair.create(tokens[0], Integer.valueOf(tokens[1]));
 
     }
 

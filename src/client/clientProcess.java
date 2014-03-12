@@ -1,5 +1,6 @@
 package client;
 
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
@@ -26,15 +27,37 @@ public class clientProcess {
     private int commandCounter = 0;
     private int addressCounter = 0;
 
+//    private static PrintWriter fileOutput = null;
+    private static File file;
+    private int clientID = clientAttribute.getInstance().getClientID();
+
+
     //Client is a singleton. This guarantees only one instance of client per process
     clientAttribute client = clientAttribute.getInstance();
     final Logger logger = Logger.getLogger(clientProcess.class.getName());
 
     //Constructor
     public clientProcess() {
-        this.possibleAddresses = client.getHostAddresses();
-        this.commands = client.getClientInstruction();
-        commandSize = commands.size();
+        try{
+            this.possibleAddresses = client.getHostAddresses();
+            this.commands = client.getClientInstruction();
+            //fileOutput = new PrintWriter("c"+Integer.toString(clientID)+".out", "UTF-8");
+
+            //create output file for this client
+            file = new File ("c"+Integer.toString(clientID)+".out");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            commandSize = commands.size();
+        } catch (FileNotFoundException notFound) {
+            notFound.printStackTrace();
+        } catch (UnsupportedEncodingException unsupported) {
+            unsupported.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     //Construct the TCPClient object
@@ -110,6 +133,9 @@ public class clientProcess {
                 addressCounter = 0;
                 //Increment the command counter so we will process the next command on the next iteration
                 commandCounter++;
+
+                //Should have returned a true/false now, go ahead and write result to output file
+                tcpClient.writeOutputFile(tcpClient.modifiedSentence, file);
             }
             //Put this process to sleep for defined amount of time (ms)
             else if (instructionCode > 0) {

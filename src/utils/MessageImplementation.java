@@ -1,7 +1,7 @@
 package utils;
 
 import client.TCPClient;
-import com.sun.tools.javac.util.Pair;
+//import com.sun.tools.javac.util.Pair;
 import logicfactory.LamportMutex;
 import logicfactory.businessLogic;
 import logicfactory.library;
@@ -31,7 +31,7 @@ public class MessageImplementation {
             // Send message to everyone but me
             if(entry.getKey() != src){
                 Pair<String,Integer> idPair  = server.getAddressForServer(entry.getKey());
-                sendMsg(idPair.snd,idPair.fst, entry.getKey() ,src, MsgType, Msg);
+                sendMsg(idPair.second,idPair.first, entry.getKey() ,src, MsgType, Msg);
 
             }
         }
