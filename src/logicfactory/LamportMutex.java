@@ -3,6 +3,7 @@ package logicfactory;
 import utils.DirectClock;
 import utils.Message;
 import utils.MessageImplementation;
+import utils.StaticWaits;
 
 import java.util.concurrent.locks.Lock;
 
@@ -80,7 +81,7 @@ public class LamportMutex implements utils.Lock {
         }
         else if ( tag.equals("release"))
                     q[src] = Infinity;
-        //notify(); // okayCS() may be true now
+//        StaticWaits.staticNotify(); // okayCS() may be true now
         return msg;
     }
 
